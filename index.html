@@ -1267,18 +1267,39 @@ async function paintAyahWords(s,a){
 }
 
 /* ══ ĀYAH RANGE SELECTION ════════════════════════════════ */
-const sel={on:false, from:null, to:null, laps:1};
+const sel={on:false, from:null, to:null, laps:1, anchor:null};
 function toggleSelect(){
   sel.on=!sel.on;
-  if(!sel.on){ sel.from=sel.to=null; }
-  openSurah(state.surah,true); 
-  toast(sel.on?'Tap two āyāt to mark the start and end':'Selection off');
+  if(sel.on){
+    // start from whatever is on screen, so the controls mean what they show
+    if(sel.from===null){ const a=firstVisibleAyah(); sel.from=a; sel.to=a; }
+  }else{ sel.from=sel.to=null; }
+  openSurah(state.surah,true);
+  toast(sel.on?'Tap āyāt to set the start and end, or use the dropdowns':'Selection off');
+}
+function firstVisibleAyah(){
+  const n=META[state.surah-1].c;
+  for(const el of $$('#ayahs .ayah')){
+    const r=el.getBoundingClientRect();
+    if(r.bottom>90){ const a=+el.id.split('-')[1]; if(a>=1&&a<=n) return a; }
+  }
+  return 1;
+}
+// keep the range inside the sūrah when the sūrah changes
+function clampSelection(){
+  if(!sel.on) return;
+  const n=META[state.surah-1].c;
+  if(sel.from===null) return;
+  sel.from=Math.min(Math.max(1,sel.from),n);
+  sel.to=Math.min(Math.max(sel.from,sel.to??sel.from),n);
 }
 function pickAyah(a){
   if(!sel.on) return;
-  if(sel.from===null||sel.to!==null){ sel.from=a; sel.to=null; }
-  else if(a<sel.from){ sel.to=sel.from; sel.from=a; }
-  else sel.to=a;
+  if(sel.anchor==null || sel.from!==sel.to){   // begin a new range
+    sel.anchor=a; sel.from=a; sel.to=a;
+  }else{                                        // extend from the anchor
+    sel.from=Math.min(sel.anchor,a); sel.to=Math.max(sel.anchor,a);
+  }
   paintSelection(); renderRangeBar();
 }
 function paintSelection(){
@@ -1290,20 +1311,22 @@ function paintSelection(){
     if(b) b.classList.toggle('on',!!inR);
   });
 }
-function clearSelection(){ sel.from=sel.to=null; paintSelection(); renderRangeBar(); }
+function clearSelection(){ const a=firstVisibleAyah(); sel.from=sel.to=a; sel.anchor=null; paintSelection(); renderRangeBar(); }
 function renderRangeBar(){
   const bar=$('#rangebar'); if(!bar) return;
   if(!sel.on){ bar.innerHTML=''; return; }
+  clampSelection();
   const s=state.surah, n=META[s-1].c;
   const has=sel.from!==null;
   const to=sel.to??sel.from;
+  const count=has?(to-sel.from+1):0;
   bar.innerHTML=`<div class="bar rangebar">
     <label>Selection</label>
     <select class="sel" onchange="sel.from=+this.value;if(sel.to<sel.from)sel.to=sel.from;paintSelection();renderRangeBar()">
       ${Array.from({length:n},(_,i)=>`<option value="${i+1}" ${has&&sel.from===i+1?'selected':''}>from ${i+1}</option>`).join('')}</select>
     <select class="sel" onchange="sel.to=+this.value;if(sel.to<sel.from)sel.from=sel.to;paintSelection();renderRangeBar()">
       ${Array.from({length:n},(_,i)=>`<option value="${i+1}" ${has&&to===i+1?'selected':''}>to ${i+1}</option>`).join('')}</select>
-    <span class="c-count">${has?`${to-sel.from+1} āyāt · ${s}:${sel.from}–${to}`:'nothing chosen yet'}</span>
+    <span class="c-count">${has?`${count} āyah${count===1?'':'s'} · ${s}:${sel.from}${count>1?'–'+to:''}`:'tap an āyah to begin'}</span>
     <label for="lap">Repeat the set</label>
     <select class="sel" id="lap" onchange="sel.laps=+this.value">
       ${[1,2,3,5,10,99].map(n=>`<option value="${n}" ${(sel.laps||1)===n?'selected':''}>${n===99?'until stopped':n===1?'once':n+'×'}</option>`).join('')}</select>
@@ -1314,7 +1337,8 @@ function renderRangeBar(){
   </div>`;
 }
 function playSelection(){
-  if(sel.from===null){ toast('Choose a range first'); return; }
+  clampSelection();
+  if(sel.from===null){ toast('Tap an āyah first'); return; }
   const to=sel.to??sel.from;
   playAyah(state.surah,sel.from,{to, from:sel.from, loop:true, laps:(sel.laps||1)});
   const el=$('#a'+state.surah+'-'+sel.from);
@@ -1963,6 +1987,7 @@ function jumpAyah(){
   el.blur();
 }
 function openSurah(n,keep){
+  if(!keep && sel.on && n!==state.surah){ sel.from=sel.to=1; sel.anchor=null; }
   state.surah=n; const s=META[n-1], ay=QURAN[String(n)];
   renderSurahList();
   const L=state.langs;

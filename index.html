@@ -56,21 +56,23 @@ a{color:var(--lapis-lt);text-decoration-thickness:1px;text-underline-offset:2px}
   border-bottom:1px solid var(--ink-3);
   box-shadow:0 1px 0 rgba(176,138,62,.28);
 }
-.rail-in{max-width:1360px;margin:0 auto;padding:9px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;flex-shrink:0}
+.rail-in{max-width:1360px;margin:0 auto;padding:8px 18px 0;display:grid;gap:7px 16px;align-items:center;
+  grid-template-columns:auto 1fr auto;grid-template-areas:'brand search langs' 'nav nav nav'}
+.brand{grid-area:brand;display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;flex-shrink:0}
 .brand svg{width:30px;height:36px;flex-shrink:0}
 .brand-tx b{display:block;font-family:var(--f-disp);font-weight:600;font-size:17px;letter-spacing:.16em;line-height:1;color:var(--paper)}
 .brand-tx span{display:block;font-family:var(--f-ar);font-size:14px;color:var(--gold-lt);line-height:1.5;margin-top:1px}
 
-nav.tabs{display:flex;gap:1px;flex-wrap:nowrap;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+nav.tabs{grid-area:nav;display:flex;gap:1px;flex-wrap:nowrap;overflow-x:auto;min-width:0;scrollbar-width:none;
+  padding-bottom:2px;margin-inline:-4px;padding-inline:4px}
 nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs button{
-  padding:7px 10px;border-radius:var(--r);color:var(--on-ink-dim);
+  padding:8px 13px;border-radius:var(--r);color:var(--on-ink-dim);
   font-size:13.5px;font-weight:500;letter-spacing:.02em;position:relative;
   border:1px solid transparent;white-space:nowrap;transition:color .15s,background .15s;
 }
 nav.tabs button .ar{font-family:var(--f-ar);font-size:14px;opacity:.55;margin-inline-start:5px}
-@media(max-width:1420px){nav.tabs button .ar{display:none}}
+@media(max-width:1000px){nav.tabs button .ar{display:none}}
 nav.tabs button:hover{color:var(--paper);background:var(--ink-2)}
 nav.tabs button[aria-current="page"]{color:var(--paper);background:var(--ink-2);border-color:var(--ink-4)}
 nav.tabs button[aria-current="page"]::after{
@@ -78,7 +80,7 @@ nav.tabs button[aria-current="page"]::after{
 }
 
 /* language toggles — independent, so any combination can be read side by side */
-.langs{display:flex;gap:0;border:1px solid var(--ink-4);border-radius:var(--r);overflow:hidden;flex-shrink:0}
+.langs{grid-area:langs;display:flex;gap:0;border:1px solid var(--ink-4);border-radius:var(--r);overflow:hidden;flex-shrink:0}
 .langs button{
   padding:6px 11px;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--on-ink-dim);
   border-right:1px solid var(--ink-4);transition:.15s;
@@ -88,7 +90,7 @@ nav.tabs button[aria-current="page"]::after{
 .langs button[data-l="ar"]{font-family:var(--f-ar);font-size:15px;letter-spacing:0}
 .langs button[data-l="bn"]{font-family:var(--f-bn-ui);letter-spacing:0}
 
-.gsearch{position:relative;flex:1;min-width:150px;max-width:310px}
+.gsearch{grid-area:search;position:relative;min-width:0;width:100%;max-width:420px;justify-self:end;margin-inline-end:12px}
 .gsearch input{
   width:100%;padding:8px 12px 8px 32px;background:var(--ink-2);border:1px solid var(--ink-4);
   border-radius:var(--r);color:var(--paper);font-size:13.5px;
@@ -129,13 +131,13 @@ aside.side{position:sticky;top:74px;max-height:calc(100vh - 96px);display:flex;f
 
 /* mobile header: brand + languages, then search, then a scrolling tab strip */
 @media(max-width:760px){
-  .rail-in{gap:9px;padding:8px 13px}
-  .brand{order:1}
-  .langs{order:2;margin-inline-start:auto}
-  .gsearch{order:3;flex:1 0 100%;max-width:none}
-  nav.tabs{order:4;flex:1 0 100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:1px}
+  .rail-in{gap:7px 10px;padding:7px 13px 0;
+    grid-template-columns:auto 1fr;grid-template-areas:'brand langs' 'search search' 'nav nav'}
+  .gsearch{max-width:none;margin-inline-end:0}
+  nav.tabs{flex-wrap:wrap;overflow-x:visible;gap:3px;justify-content:flex-start}
   nav.tabs::-webkit-scrollbar{display:none}
-  nav.tabs button{padding:6px 11px;font-size:13px}
+  nav.tabs button{padding:7px 10px;font-size:13px;flex:0 0 auto}
+  nav.tabs button[aria-current="page"]::after{left:8px;right:8px}
   .brand svg{width:26px;height:31px}
   .brand-tx b{font-size:15px;letter-spacing:.13em}
   .brand-tx span{font-size:12.5px}
@@ -628,6 +630,68 @@ footer a{color:var(--lapis-lt)}
   .m-sen{margin-inline-end:0;flex:1 1 100%}
 }
 
+
+/* ══ FOOTER & LEGAL ══════════════════════════════════════ */
+.foot-grid{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-bottom:14px;
+  border-bottom:1px solid var(--ink-3);margin-bottom:14px}
+.foot-brand{display:flex;align-items:center;gap:11px}
+.foot-brand b{font-family:var(--f-disp);font-size:14px;letter-spacing:.16em;color:var(--paper)}
+.foot-name{display:block;font-size:12px;color:var(--on-ink-dim);margin-top:3px;letter-spacing:.02em}
+.foot-links{display:flex;gap:4px;flex-wrap:wrap;margin-inline-start:auto}
+.foot-links button{padding:6px 12px;border:1px solid var(--ink-4);border-radius:var(--r);
+  font-size:12.5px;color:var(--on-ink-dim);background:var(--ink-2);transition:.14s}
+.foot-links button:hover{border-color:var(--gold);color:var(--gold-lt)}
+.foot-note{font-size:12.2px;line-height:1.75;color:var(--on-ink-dim);margin:0 0 8px;max-width:74ch}
+.foot-note b{color:var(--paper)}
+button.link{background:none;border:none;padding:0;color:var(--lapis-lt);font-size:inherit;
+  text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+button.link:hover{color:var(--gold-lt)}
+@media(max-width:620px){.foot-links{margin-inline-start:0;width:100%}}
+
+.modal{position:fixed;inset:0;z-index:200;background:rgba(8,14,26,.82);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  display:grid;place-items:center;padding:20px;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-in{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--r);
+  width:min(760px,100%);max-height:min(86vh,860px);display:flex;flex-direction:column;
+  box-shadow:0 28px 70px -18px rgba(0,0,0,.85),0 0 0 1px rgba(176,138,62,.28)}
+.modal-hd{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--ink-3)}
+.modal-hd b{font-family:var(--f-disp);font-size:16px;letter-spacing:.14em;color:var(--paper)}
+.modal-x{margin-inline-start:auto;width:30px;height:30px;border-radius:var(--r);
+  border:1px solid var(--ink-4);color:var(--on-ink-dim);font-size:14px;line-height:1}
+.modal-x:hover{border-color:var(--rubric);color:var(--rubric-soft)}
+.modal-tabs{display:flex;gap:2px;padding:10px 14px;border-bottom:1px solid var(--ink-3);flex-wrap:wrap}
+.modal-tabs button{padding:7px 12px;border:1px solid var(--ink-4);border-radius:var(--r);
+  font-size:12.5px;color:var(--on-ink-dim);background:var(--ink);transition:.14s;line-height:1.3}
+.modal-tabs button i{font-family:var(--f-ar);font-style:normal;font-size:12.5px;
+  margin-inline-start:6px;opacity:.55}
+.modal-tabs button:hover{border-color:var(--gold);color:var(--paper)}
+.modal-tabs button.on{background:var(--gold);border-color:var(--gold);color:#12100A}
+.modal-body{overflow-y:auto;background:var(--paper);color:var(--on-paper);flex:1;
+  background-image:repeating-linear-gradient(0deg,rgba(160,140,100,.045) 0 1px,transparent 1px 4px)}
+.modal-body p{font-family:var(--f-disp);font-size:14.6px;line-height:1.72;color:#2A2C30;margin:0 0 11px}
+.modal-body .lede{font-size:16px;color:#15171B;font-weight:500}
+.modal-body b{color:#15171B}
+.modal-ft{display:flex;align-items:center;gap:12px;padding:11px 18px;border-top:1px solid var(--ink-3)}
+.modal-ft span{font-size:12px;color:var(--on-ink-dim);margin-inline-end:auto}
+.legal-t{width:100%;border-collapse:collapse;margin:12px 0 14px;font-family:var(--f-ui)}
+.legal-t th{text-align:start;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--rubric);font-weight:600;padding:7px 9px;border-bottom:1px solid var(--paper-3)}
+.legal-t td{font-size:12.8px;line-height:1.5;color:#33353A;padding:8px 9px;
+  border-bottom:1px solid rgba(120,100,60,.15);vertical-align:top}
+.legal-t tr:last-child td{border-bottom:none}
+.legal-t td:first-child{color:#15171B;font-weight:500}
+@media(max-width:620px){
+  .modal{padding:10px}
+  .legal-t,.legal-t tbody,.legal-t tr,.legal-t td{display:block;width:100%}
+  .legal-t thead{display:none}
+  .legal-t tr{padding:8px 0;border-bottom:1px solid rgba(120,100,60,.18)}
+  .legal-t td{padding:2px 0;border:none}
+  .legal-t td:first-child{font-size:13.4px}
+  .legal-t td:nth-child(2){color:var(--on-paper-dim)}
+  .legal-t td:last-child{font-size:12px;font-style:italic;color:var(--on-paper-dim)}
+}
+
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 @media print{
   body{background:#fff}.rail,.side,.a-acts,.bar,.grades,.c-bar{display:none !important}
@@ -796,9 +860,33 @@ footer a{color:var(--lapis-lt)}
 </main>
 
 <footer>
-  <p><b>Mishkāt</b> — a study desk for the Book of Allah, the Sunnah of His Messenger ﷺ, and the language they were revealed in. The name is taken from <span class="ar-inline">مِشْكَاةٍ فِيهَا مِصْبَاحٌ</span> — "a niche within which is a lamp" (al-Nūr 24:35).</p>
-  <p><b>Sources.</b> Qur'ānic text and the Bangla and English translations, together with word-level glosses, are drawn from the open Word-by-Word Qur'ān dataset; morphology (root, lemma, part of speech) is from the Quranic Arabic Corpus (Kais Dukes, University of Leeds), used verbatim under its licence. Ḥadīth come from the open ḥadīth archive; commentaries from the open tafsīr archive. Translations of the Qur'ān and of copyrighted commentaries remain the property of their translators and publishers.</p>
-  <p><b>A word of caution.</b> This is a study aid, not a muftī. Comparative positions are summarised from the standard works of each school and state the dominant view; genuine variation exists within every madhhab. For anything that touches your own worship, property, or family, put the question to a qualified scholar who knows your circumstances.</p>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <svg viewBox="0 0 56 66" aria-hidden="true" width="26" height="31">
+        <path d="M28 3C14 3 5 14 5 28v35h46V28C51 14 42 3 28 3z" fill="none" stroke="#B08A3E" stroke-width="2"/>
+        <path d="M28 9C17 9 11 18 11 29v28h34V29C45 18 39 9 28 9z" fill="none" stroke="#2E5090" stroke-width="1.3"/>
+        <ellipse cx="28" cy="34" rx="7.5" ry="9.5" fill="#D8B968"/><ellipse cx="28" cy="33" rx="3.6" ry="5" fill="#0E1A2E"/>
+        <path d="M28 44v8M20 52h16" stroke="#B08A3E" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <div>
+        <b>MISHKĀT</b> <span class="ar-inline">مشكاة</span>
+        <span class="foot-name">© 2026 Ishtiak Ahmed · All rights reserved</span>
+      </div>
+    </div>
+    <nav class="foot-links" aria-label="Legal">
+      <button onclick="openLegal('copyright')">Copyright</button>
+      <button onclick="openLegal('sources')">Sources &amp; licences</button>
+      <button onclick="openLegal('disclaimer')">Disclaimer</button>
+      <button onclick="openLegal('privacy')">Privacy</button>
+    </nav>
+  </div>
+  <p class="foot-note">The name is taken from <span class="ar-inline">مِشْكَاةٍ فِيهَا مِصْبَاحٌ</span> —
+    "a niche within which is a lamp" (al-Nūr 24:35). The Qur'ān is the speech of Allah and the Sunnah belongs
+    to the ummah; neither is anyone's property. Copyright here covers only this application, its design and
+    its editorial work. Third-party texts, translations, recitations and datasets remain with their owners —
+    see <button class="link" onclick="openLegal('sources')">Sources &amp; licences</button>.</p>
+  <p class="foot-note"><b>A study aid, not a muftī.</b> No ruling is issued here. For anything touching your
+    worship, property or family, ask a qualified scholar who knows your circumstances.
+    <button class="link" onclick="openLegal('disclaimer')">Full disclaimer</button></p>
 </footer>
 <div class="toast" id="toast"></div>
 
@@ -2076,6 +2164,126 @@ function playWhole(s,btn){
   if(AUD.queue){ stopAudio(); return; }
   pushReturn(); go('quran'); openSurah(s);
   setTimeout(()=>playAyah(s,1,{to:QURAN[String(s)].length,from:1,laps:1}),120);
+}
+</script>
+<script>/* ══ LEGAL — copyright, licences, disclaimer, privacy ════ */
+const OWNER = 'Ishtiak Ahmed';
+const YEAR  = '2026';
+
+const LEGAL = {
+ copyright: {t:'Copyright', ar:'حقوق النشر', html:`
+  <p class="lede">© ${YEAR} <b>${OWNER}</b>. All rights reserved.</p>
+  <p>This copyright covers the parts of <b>Mishkāt</b> that are the author's own work: the design and
+  visual language, the interface and its code, the organisation of the material, the editorial notes
+  and explanations, the selection and arrangement of the supplications and the emphasised texts, the
+  comparative fiqh summaries, the vocabulary decks and their sequencing, and the English and Bangla
+  renderings written for this application.</p>
+  <p><b>It does not extend to the revealed texts themselves.</b> The Qur'ān is the speech of Allah and
+  is not anyone's property. The Sunnah of His Messenger ﷺ belongs to the ummah. Nor does it extend to
+  third-party material used here under the licences set out under <i>Sources & licences</i> — the
+  rights in those remain entirely with their own authors, translators and publishers.</p>
+  <p>You are welcome to use this file for personal study, to keep a copy, and to share it unmodified
+  with others as a gift. If you wish to republish it, sell it, or build a product on it, please seek
+  permission first, and in every case respect the separate third-party licences below.</p>`},
+
+ sources: {t:'Sources & licences', ar:'المصادر', html:`
+  <p class="lede">Mishkāt stands on work done by others, most of it given away freely. Attribution is
+  a debt, not a formality.</p>
+  <table class="legal-t">
+    <tr><th>Material</th><th>Source</th><th>Terms</th></tr>
+    <tr><td>Qur'ānic text (Uthmānī)</td><td>Tanzil Project, via the open Word-by-Word dataset</td><td>Creative Commons BY-ND — redistributed unmodified</td></tr>
+    <tr><td>Bangla translation</td><td>Muhiuddin Khan</td><td>© the translator and publisher</td></tr>
+    <tr><td>English translation</td><td>Shakir</td><td>Public domain / freely circulated</td></tr>
+    <tr><td>Word-by-word glosses &amp; transliteration</td><td>Open Word-by-Word Qur'ān dataset, QuranWBW</td><td>Community-released for free use</td></tr>
+    <tr><td>Morphology — root, lemma, part of speech</td><td>Quranic Arabic Corpus, Kais Dukes, University of Leeds</td><td>GNU General Public Licence; used verbatim with attribution</td></tr>
+    <tr><td>Word-level recitation timings</td><td>quran-align, Collin (Chris) Fair</td><td>Creative Commons BY 4.0</td></tr>
+    <tr><td>Recitation audio</td><td>Islamic Network CDN, sourced from EveryAyah</td><td>Streamed from the provider; rights with the reciters and publishers</td></tr>
+    <tr><td>Ḥadīth collections</td><td>Open ḥadīth archive (fawazahmed0)</td><td>Free redistribution; translations © their translators</td></tr>
+    <tr><td>Tafsīr</td><td>Open tafsīr archive (spa5k)</td><td>Classical texts in the public domain; modern translations © their publishers</td></tr>
+    <tr><td>Supplication audio</td><td>Ḥiṣn al-Muslim recordings (Adhkar-json)</td><td>Freely distributed</td></tr>
+    <tr><td>Typefaces</td><td>Amiri, Scheherazade New, Noto, Hind Siliguri, Spectral, IBM Plex</td><td>SIL Open Font Licence / Apache 2.0</td></tr>
+  </table>
+  <p><b>Copyrighted translations.</b> Several translations of the Qur'ān and of the tafsīr works remain
+  under copyright — among them the abridged English Ibn Kathīr, Maʿāriful Qurʾān, and Tafsīr Fatḥul Majīd
+  in Bangla. They are shown here by linking to the open archives that publish them, for private study
+  only. All rights stay with their translators and publishers. If you hold rights in anything reproduced
+  here and would rather it were removed, that request will be honoured.</p>`},
+
+ disclaimer: {t:'Disclaimer', ar:'إخلاء المسؤولية', html:`
+  <p class="lede">Mishkāt is a study aid. It is not a muftī, and it does not issue fatwā.</p>
+  <p><b>No ruling is given here.</b> The comparative fiqh material states the dominant position of each
+  school as recorded in its standard works. Real variation exists within every madhhab, and a summary
+  cannot weigh your circumstances. For anything touching your worship, your property, your marriage or
+  your family, put the question to a qualified scholar who knows your situation.</p>
+  <p><b>On the ḥadīth and their gradings.</b> Citations have been checked against the collections
+  themselves, and gradings are reported as the scholars who made them stated. Those scholars sometimes
+  disagree with one another, and a grading is itself an act of <i>ijtihād</i>. Where a popular wording
+  could not be authenticated, that is said plainly on the card rather than quietly smoothed over.
+  Before resting a ruling on any report, verify it in the printed critical editions.</p>
+  <p><b>On translation.</b> No translation is the Qur'ān. Every rendering here — English or Bangla — is
+  a human attempt at meaning and carries the limits of its translator. The Bangla renderings of the
+  Prophetic supplications were prepared for this application and have not been reviewed by a licensed
+  scholar. Read the Arabic where you can.</p>
+  <p><b>On errors.</b> This software is provided as it is, without warranty of any kind. Despite careful
+  checking, mistakes are possible in the data, in the audio synchronisation, and in the editorial notes.
+  The author accepts no liability for any loss or harm arising from its use. If you find an error in a
+  sacred text or a citation, please report it — correcting it takes precedence over everything else here.</p>`},
+
+ privacy: {t:'Privacy', ar:'الخصوصية', html:`
+  <p class="lede">Nothing you do in Mishkāt is sent to the author, and there is no analytics, no
+  tracking, and no advertising of any kind.</p>
+  <p><b>What is stored, and where.</b> Your bookmarks, notes, memorisation progress, vocabulary
+  progress and preferences are kept in your own browser's local storage, on your own device. They are
+  never transmitted. Clearing your browser data will erase them, so keep your own copy of anything
+  that matters to you.</p>
+  <p><b>What leaves your device.</b> The Qur'ān, its translations, the word-by-word data, the
+  vocabulary, the supplications, the emphasised texts and the recitation timings are all inside this
+  file and work with no connection at all. Four things are fetched on demand, and only when you ask
+  for them: recitation audio, ḥadīth beyond the two stored collections, tafsīr, and the supplication
+  recordings. Those requests go to the third-party providers named under <i>Sources</i> and are subject
+  to their own privacy practices, over which the author has no control. The web fonts are loaded from
+  Google Fonts on first use.</p>
+  <p>If you want it entirely offline, open the file with your connection off — everything stored inside
+  it still works.</p>`},
+};
+
+let legalTab='copyright';
+function openLegal(tab){
+  legalTab=tab||'copyright';
+  let m=$('#legalModal');
+  if(!m){
+    m=document.createElement('div'); m.id='legalModal'; m.className='modal';
+    m.addEventListener('click',e=>{ if(e.target===m) closeLegal(); });
+    document.body.appendChild(m);
+  }
+  renderLegal();
+  document.body.style.overflow='hidden';
+  document.addEventListener('keydown',legalKey);
+}
+function legalKey(e){ if(e.key==='Escape') closeLegal(); }
+function closeLegal(){
+  const m=$('#legalModal'); if(m) m.remove();
+  document.body.style.overflow='';
+  document.removeEventListener('keydown',legalKey);
+}
+function renderLegal(){
+  const m=$('#legalModal'); if(!m) return;
+  const L=LEGAL[legalTab];
+  m.innerHTML=`<div class="modal-in" role="dialog" aria-modal="true" aria-label="Legal information">
+    <div class="modal-hd">
+      <div><b>Mishkāt</b><span class="ar-inline" style="margin-inline-start:9px">مشكاة</span></div>
+      <button class="modal-x" onclick="closeLegal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-tabs">${Object.entries(LEGAL).map(([k,v])=>`
+      <button class="${legalTab===k?'on':''}" onclick="legalTab='${k}';renderLegal()">
+        ${esc(v.t)}<i>${esc(v.ar)}</i></button>`).join('')}</div>
+    <div class="modal-body sheet-pad">${L.html}</div>
+    <div class="modal-ft">
+      <span>© ${YEAR} ${esc(OWNER)}</span>
+      <button class="btn" onclick="closeLegal()">Close</button>
+    </div>
+  </div>`;
+  m.querySelector('.modal-body').scrollTop=0;
 }
 </script>
 <script>/* ══ MISHKĀT ══════════════════════════════════════════════ */
